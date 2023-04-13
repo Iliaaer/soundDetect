@@ -10,8 +10,8 @@ pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
                                     use_auth_token="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")
 
 # model = whisper.load_model("medium")
-model = whisper.load_model("large-v2")
-print(model.is_multilingual)
+model = whisper.load_model("large")
+
 
 
 FILE_NAME = "5"
