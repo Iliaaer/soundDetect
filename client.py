@@ -1,11 +1,6 @@
 from pyannote.audio import Pipeline
 import whisper
 
-def millisec(timeStr):
-    spl = timeStr.split(":")
-    s = (int)((int(spl[0]) * 60 * 60 + int(spl[1]) * 60 + float(spl[2]) )* 1000)
-    return s
-
 pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
                                     use_auth_token="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")
 
@@ -15,8 +10,11 @@ model = whisper.load_model("large")
 
 
 FILE_NAME = "5"
+MIN_SPEAKERS = 1
+MAX_SPEAKERS = 2
 
-diarization = pipeline("wav/" + FILE_NAME + ".wav")
+
+diarization = pipeline("wav/" + FILE_NAME + ".wav", min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
 
 for turn, _, speaker in diarization.itertracks(yield_label=True):
     print(f"start={turn.start*1000}s stop={turn.end*1000}s speaker_{speaker}")
