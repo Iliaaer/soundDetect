@@ -1,4 +1,4 @@
 # soundDetect
 
-https://github.com/openai/whisper
+whisper - https://github.com/openai/whisper
 
