@@ -25,6 +25,8 @@ Fast API
 
 ```bash
 pip install fastapi[all]
+pip install fastapi-users[sqlalchemy]
+
 ```
 
 run:
@@ -33,7 +35,27 @@ run:
 uvicorn main:app --reload
 ```
 
+создание базы данных:
+
+```bash
+alembic revision --autogenerate -m "Database creation"
+alembic upgrade 2e9df82fd1d7
+
+```
+
+
+
+
+
 База данных: mysql или PostgeSQL
+
+postgeSQL
+
+```bash
+pip install sqlalchemy alembic psycopg2
+alembic init migrations
+```
+
 
 Текстовый поиск: elasticsearch
 
