@@ -26,6 +26,7 @@ Fast API
 ```bash
 pip install fastapi[all]
 pip install fastapi-users[sqlalchemy]
+pip install asyncpg
 
 ```
 
@@ -39,7 +40,7 @@ uvicorn main:app --reload
 
 ```bash
 alembic revision --autogenerate -m "Database creation"
-alembic upgrade 2e9df82fd1d7
+alembic stamp head
 
 ```
 

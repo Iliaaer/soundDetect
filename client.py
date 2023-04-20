@@ -3,7 +3,7 @@ import whisper
 import json
 
 
-DEVICE = "gpu"
+DEVICE = "cpu"
 FILE_NAME = "5"
 MIN_SPEAKERS = 1
 MAX_SPEAKERS = 2
@@ -15,14 +15,18 @@ pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
 
 
 
-diarization = pipeline("wav/" + FILE_NAME + ".wav", min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
+diarization = pipeline(
+    f"wav/{FILE_NAME}.wav",
+    min_speakers=MIN_SPEAKERS,
+    max_speakers=MAX_SPEAKERS,
+)
 for turn, _, speaker in diarization.itertracks(yield_label=True):
     print(f"start={turn.start}s stop={turn.end}s speaker_{speaker}")
 
 
 # model = whisper.load_model("medium")
 model = whisper.load_model(name=MODEL_NAME, device=DEVICE)
-audio = whisper.load_audio("wav/" + FILE_NAME + ".wav")
+audio = whisper.load_audio(f"wav/{FILE_NAME}.wav")
 result = model.transcribe(audio, language=LANGUAGE_WHISPER, verbose=True, fp16=False)
 # jsonResult = json.dumps(result, indent=4, ensure_ascii=False)
 # with open('detect/audio_text_' + FILE_NAME + '.json', 'w') as outfile:
@@ -30,5 +34,5 @@ result = model.transcribe(audio, language=LANGUAGE_WHISPER, verbose=True, fp16=F
 
 print(result["text"])
 
-with open("detect/audio_" + FILE_NAME + ".rttm", "w") as rttm:
+with open(f"detect/audio_{FILE_NAME}.rttm", "w") as rttm:
     diarization.write_rttm(rttm)
