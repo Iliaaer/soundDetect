@@ -21,6 +21,18 @@ pip install git+https://github.com/openai/whisper.git
 
 API: Fast API или Flask
 
+Fast API
+
+```bash
+pip install fastapi[all]
+```
+
+run:
+
+```bash
+uvicorn main:app --reload
+```
+
 База данных: mysql или PostgeSQL
 
 Текстовый поиск: elasticsearch
