@@ -19,7 +19,7 @@ from pyannote.audio import Pipeline
 from src.pyannote_whisper.utils import diarize_text
 from src.config import PIPELINE_TOKEN
 
-pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",
+pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
                                     use_auth_token=PIPELINE_TOKEN)
 model = whisper.load_model(name="large", device="cpu")
 
