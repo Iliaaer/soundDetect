@@ -27,6 +27,7 @@ Fast API
 pip install fastapi[all]
 pip install fastapi-users[sqlalchemy]
 pip install asyncpg
+pip install python-multipart
 
 ```
 
@@ -40,13 +41,9 @@ uvicorn main:app --reload
 
 ```bash
 alembic revision --autogenerate -m "Database creation"
-alembic stamp head
+alembic upgrade head
 
 ```
-
-
-
-
 
 База данных: mysql или PostgeSQL
 
@@ -56,7 +53,6 @@ postgeSQL
 pip install sqlalchemy alembic psycopg2
 alembic init migrations
 ```
-
 
 Текстовый поиск: elasticsearch
 
