@@ -15,6 +15,15 @@ pip install -qq https://github.com/pyannote/pyannote-audio/archive/develop.zip
 pip install git+https://github.com/openai/whisper.git 
 ```
 
+tets.py
+
+```bash
+pip install pytorch_lightning==1.6 torch-audiomentations==0.11.0 asteroid-filterbanks==0.4 pyannote.metrics==3.2 pyannote.pipeline==2.3 speechbrain torchaudio==2.0.0 torch==2.0.0 hmmlearn==0.2.6
+pip install pyannote.audio --no-deps
+```
+
+
+
 Фротенд: ??? Нужен ли?
 
 Беэкнд:
