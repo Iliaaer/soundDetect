@@ -71,7 +71,7 @@ async def post_audio_file(device_type: str, in_file: UploadFile = File(...), ses
     stmt = insert(audiofile).values(**new_audio_file.dict())
     await session.execute(stmt)
     await session.commit()
-    return {"status": "success", "filename": new_file_name}
+    return {"status": "success", "filename": new_file_name, "result": result_all}
 
 @router.get("/download")
 def get_audio_file(filename: str):
