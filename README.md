@@ -22,8 +22,6 @@ pip install pytorch_lightning==1.6 torch-audiomentations==0.11.0 asteroid-filter
 pip install pyannote.audio --no-deps
 ```
 
-
-
 Фротенд: ??? Нужен ли?
 
 Беэкнд:
@@ -70,6 +68,13 @@ alembic init migrations
 Кэш: redis или memcached  -  Нужен ли?
 
 Очередь задачь: Celery или RabbitMQ - Нужен ли?
+
+Celery
+
+```bash
+celery -A src.tasks.tasks:celery worker --loglevel=INFO --pool=solo
+celery -A src.tasks.tasks:celery flower
+```
 
 Нейроные сети: самописное на паралельном потоке...
 

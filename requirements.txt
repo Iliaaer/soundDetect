@@ -1,3 +1,9 @@
+numpy
+torch
+torchvision
+openai-whisper
+pyannote.audio
+
 alembic
 asyncpg
 fastapi[all]
@@ -5,4 +11,6 @@ fastapi-users[sqlalchemy]
 python-dotenv
 sqlalchemy
 aiofiles
-librosa
+fastapi-cache2[redis] 
+celery 
+flower
