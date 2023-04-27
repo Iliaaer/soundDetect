@@ -41,7 +41,7 @@ pip install python-multipart
 run:
 
 ```bash
-uvicorn main:app --reload
+uvicorn src.main:app --reload
 ```
 
 создание базы данных:

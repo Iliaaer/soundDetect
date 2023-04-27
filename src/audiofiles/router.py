@@ -32,9 +32,10 @@ router = APIRouter(
 
 @router.get("/allname", response_model=List)
 async def get_all_name_audio_file(device_type: str, session: AsyncSession = Depends(get_async_session)):
-    query = select(audiofile).where(audiofile.c.device == device_type)
-    result = await session.execute(query)
-    return [dict(r._mapping) for r in result]
+    query = select(audiofile.c.name, audiofile.c.time, audiofile.c.result).where(audiofile.c.device == device_type)
+    result = [dict(r._mapping) for r in await session.execute(query)]
+
+    return [dict({"name": r["name"], "time": r["time"], "already": 0 if r["result"]["data"] == "Загружается" else 1}) for r in result]
 
 @router.post("/upload")
 async def post_audio_file(device_type: str, in_file: UploadFile = File(...), session: AsyncSession = Depends(get_async_session)):
@@ -66,7 +67,11 @@ async def post_audio_file(device_type: str, in_file: UploadFile = File(...), ses
     #     result_all[f"{seg.start:.2f}:{seg.end:.2f}"] = {spk: sent}
     #     print(line)
 
-    new_audio_file = AudioFileCreate(name=new_file_name, duration=f'{f.frames/f.samplerate}' ,time=time_now, device=device_type, result=result_all) 
+    new_audio_file = AudioFileCreate(name=new_file_name, 
+                                     duration=f'{f.frames/f.samplerate}', 
+                                     time=time_now, 
+                                     device=device_type, 
+                                     result=result_all) 
 
     stmt = insert(audiofile).values(**new_audio_file.dict())
     await session.execute(stmt)
@@ -74,8 +79,14 @@ async def post_audio_file(device_type: str, in_file: UploadFile = File(...), ses
     recognition_audio_files.delay(out_file_path=out_file_path)
     return {"status": "success", "filename": new_file_name, "result": result_all}
 
+@router.get("/resultfile", response_model=List)
+async def get_result_recognition(filename: str, session: AsyncSession = Depends(get_async_session)):
+    query = select(audiofile.c.result).where(audiofile.c.name == filename)
+    result = await session.execute(query)
+    return [r._mapping for r in result]
+    # print(result, type(result))
+
 @router.get("/download")
 def get_audio_file(filename: str):
-    in_file_path = f"wav/{filename}"
-    return FileResponse(in_file_path)
+    return FileResponse(f"wav/{filename}")
 

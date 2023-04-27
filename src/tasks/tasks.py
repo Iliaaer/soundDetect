@@ -31,18 +31,6 @@ session: async_sessionmaker[AsyncSession] = async_sessionmaker(engine, expire_on
 
 loop = asyncio.get_event_loop()
 
-@asynccontextmanager
-async def scoped_session():
-    scoped_factory = async_scoped_session(
-        session,
-        scopefunc=current_task,
-    )
-    try:
-        async with scoped_factory() as s:
-            yield s
-    finally:
-        await scoped_factory.remove()
-
 pipeline = Pipeline.from_pretrained(
     "pyannote/speaker-diarization@2.1", 
     use_auth_token=PIPELINE_TOKEN
@@ -54,6 +42,18 @@ model = whisper.load_model(
 )
 
 print("ALL READY")
+
+@asynccontextmanager
+async def scoped_session():
+    scoped_factory = async_scoped_session(
+        session,
+        scopefunc=current_task,
+    )
+    try:
+        async with scoped_factory() as s:
+            yield s
+    finally:
+        await scoped_factory.remove()
 
 async def update_res_db_text(out_file_path: str, result: dict):
     stmt = update(audiofile).where(audiofile.c.name == out_file_path.split("/")[-1]).values(result=result)
