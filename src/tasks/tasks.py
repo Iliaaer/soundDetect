@@ -15,8 +15,8 @@ from src.pyannote_whisper.utils import diarize_text
 from src.config import PIPELINE_TOKEN
 
 
-import whisper
-from pyannote.audio import Pipeline
+# import whisper
+# from pyannote.audio import Pipeline
 
 
 DEVICE_WHISPER = "cpu"
@@ -31,15 +31,15 @@ session: async_sessionmaker[AsyncSession] = async_sessionmaker(engine, expire_on
 
 loop = asyncio.get_event_loop()
 
-pipeline = Pipeline.from_pretrained(
-    "pyannote/speaker-diarization@2.1", 
-    use_auth_token=PIPELINE_TOKEN
-)
+# pipeline = Pipeline.from_pretrained(
+#     "pyannote/speaker-diarization@2.1", 
+#     use_auth_token=PIPELINE_TOKEN
+# )
 
-model = whisper.load_model(
-    name=MODEL_WHISPER, 
-    device=DEVICE_WHISPER
-)
+# model = whisper.load_model(
+#     name=MODEL_WHISPER, 
+#     device=DEVICE_WHISPER
+# )
 
 print("ALL READY")
 
@@ -65,17 +65,13 @@ async def update_res_db_text(out_file_path: str, result: dict):
 @celery.task
 def recognition_audio_files(out_file_path: str, LANGUAGE="ru", MIN_SPEAKERS: int = 1, MAX_SPEAKERS: int = 2,):
     # print("OKEY1")
-    diarization_result = pipeline(out_file_path, min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
-    asr_result = model.transcribe(out_file_path, language=LANGUAGE, fp16=False)
-    final_result = diarize_text(asr_result, diarization_result)
-    # result_all = {}
-    # for seg, spk, sent in final_result:
-    #     # line = f'{seg.start:.2f} {seg.end:.2f} {spk} {sent}'
-    #     result_all[f"{seg.start:.2f}:{seg.end:.2f}"] = {spk: sent}
-    # result_all = 
+    # diarization_result = pipeline(out_file_path, min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
+    # asr_result = model.transcribe(out_file_path, language=LANGUAGE, fp16=False)
+    # final_result = diarize_text(asr_result, diarization_result)
+
     result = {"data": {
-        f"{seg.start:.2f}:{seg.end:.2f}": {spk: sent}
-        for seg, spk, sent in final_result
+        # f"{seg.start:.2f}:{seg.end:.2f}": {spk: sent}
+        # for seg, spk, sent in final_result
     }}
     # print("OKEY3")
     loop.run_until_complete(update_res_db_text(out_file_path, result))

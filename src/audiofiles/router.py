@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 import aiofiles
 import soundfile as sf
+import json
 
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,12 +31,13 @@ router = APIRouter(
     tags=["Audio Files"]
 )
 
-@router.get("/allname", response_model=List)
+@router.get("/allname")
 async def get_all_name_audio_file(device_type: str, session: AsyncSession = Depends(get_async_session)):
     query = select(audiofile.c.name, audiofile.c.time, audiofile.c.result).where(audiofile.c.device == device_type)
     result = [dict(r._mapping) for r in await session.execute(query)]
 
-    return [dict({"name": r["name"], "time": r["time"], "already": 0 if r["result"]["data"] == "Загружается" else 1}) for r in result]
+    return {"result": 
+                [dict({"name": r["name"], "time": r["time"], "already": 0 if r["result"]["data"] == "Загружается" else 1}) for r in result]}
 
 @router.post("/upload")
 async def post_audio_file(device_type: str, in_file: UploadFile = File(...), session: AsyncSession = Depends(get_async_session)):
@@ -79,11 +81,12 @@ async def post_audio_file(device_type: str, in_file: UploadFile = File(...), ses
     recognition_audio_files.delay(out_file_path=out_file_path)
     return {"status": "success", "filename": new_file_name, "result": result_all}
 
-@router.get("/resultfile", response_model=List)
+@router.get("/resultfile")
 async def get_result_recognition(filename: str, session: AsyncSession = Depends(get_async_session)):
     query = select(audiofile.c.result).where(audiofile.c.name == filename)
     result = await session.execute(query)
-    return [r._mapping for r in result]
+    a = [r._mapping for r in result][0]
+    return {"result": a["result"]}
     # print(result, type(result))
 
 @router.get("/download")
