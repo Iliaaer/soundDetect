@@ -14,7 +14,7 @@ from src.database import get_async_session
 from src.audiofiles.models import audiofile
 from src.audiofiles.schemas import AudioFileCreate
 
-from src.tasks.tasks import recognition_audio_files
+# from src.tasks.tasks import recognition_audio_files
 
 
 # import whisper
@@ -69,16 +69,16 @@ async def post_audio_file(device_type: str, in_file: UploadFile = File(...), ses
     #     result_all[f"{seg.start:.2f}:{seg.end:.2f}"] = {spk: sent}
     #     print(line)
 
-    new_audio_file = AudioFileCreate(name=new_file_name, 
-                                     duration=f'{f.frames/f.samplerate}', 
-                                     time=time_now, 
-                                     device=device_type, 
-                                     result=result_all) 
+    # new_audio_file = AudioFileCreate(name=new_file_name, 
+    #                                  duration=f'{f.frames/f.samplerate}', 
+    #                                  time=time_now, 
+    #                                  device=device_type, 
+    #                                  result=result_all) 
 
-    stmt = insert(audiofile).values(**new_audio_file.dict())
-    await session.execute(stmt)
-    await session.commit()
-    recognition_audio_files.delay(out_file_path=out_file_path)
+    # stmt = insert(audiofile).values(**new_audio_file.dict())
+    # await session.execute(stmt)
+    # await session.commit()
+    # recognition_audio_files.delay(out_file_path=out_file_path)
     return {"status": "success", "filename": new_file_name, "result": result_all}
 
 @router.get("/resultfile")

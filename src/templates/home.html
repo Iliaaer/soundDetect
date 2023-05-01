@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<script>
+    const getAllNames = () => {
+        window.location.href = `/allaudio/local`;
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center flex-col items-center">
+    <div class="flex my-3 gap-5">
+        <button onclick="getAllNames()" class="border-2 rounded-3xl bg-gray-300 p-3">Показать аудиодорожки</button>
+    </div>
+    
+    <p><a>Загрузить аудио</a></p>
+
+    <div class="flex my-3 gap-5">
+
+        <form enctype="multipart/form-data" action="/uploadfiles/local" method="post">
+            <input type="file" name="in_file">
+            <input type="submit" value="Отправить">
+        </form> 
+    </div>
+</div>
+{% endblock %}

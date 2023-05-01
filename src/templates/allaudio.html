@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script>
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center flex-col items-center">
+    <div id="header" class="text-2xl font-bold">
+        <h3>Система распознавания голоса</h3>
+    </div>
+    {% for allname in allnames %}
+    <div class="flex rounded-3 border-2 p-3 mt-5">
+        <div class="flex flex-col">
+            <span class="text-2xl font-bold">{{ allname.name }}</span>
+            <span class="text-lg">{{ allname.time }}</span>
+            <span class="text-lg">{{ allname.already }}</span>
+        </div>
+    </div>
+{% endfor %}
+
+</div>
+{% endblock %}
