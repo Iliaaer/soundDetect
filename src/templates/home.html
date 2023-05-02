@@ -4,14 +4,10 @@
 {% block head %}
 <script>
     const getAllNames = () => {
-       // window.location.href = `/allaudio/local`;
-    //    $(this).parents(".btn-group").find('.selection').text($(this).text());
-    //             $(this).parents(".btn-group").find('.selection').val($(this).text());
-    // let a = document.getElementsByClassName("selection");
         var e = document.getElementById("ddlViewBy");
         var strUser = e.options[e.selectedIndex].value;
         console.log(strUser);
-        // console.log(((".dropdown-menu li a.selected").val()));
+        window.location.href = `/allaudio/`+strUser;
     }
 </script>
 <script>
@@ -45,28 +41,11 @@
 
         <div class="btn-group">
             <button onclick="getAllNames()" type="button" class="btn btn-info active">Показать аудиодорожки</button>
-            <!-- <button type="button" class="btn btn-info dropdown-toggle active" data-bs-toggle="dropdown"><span class="selection">с устройства</span><span class="caret"></span>
-              </button> -->
-
-              <select id="ddlViewBy">
+              <select id="ddlViewBy" style="background-color: #117a8b; color: white;">
+                <option value="local" class="dropdown-item" href="#">с компьютера</option>
                 <option value="device" class="dropdown-item" href="#">с устройства</option>
-                <option value="computer" class="dropdown-item" href="#">с компьютера</option>
             </select>
-
-            <!-- <ul class="dropdown-menu" role="menu">
-                <li><a class="dropdown-item" value="device" href="#">с устройства</a></li>
-                <li><a class="dropdown-item" value="computer" href="#">с компьютера</a></li>
-            </ul> -->
         </div>
-
-        <script>
-            $(".dropdown-menu li a").click(function () {
-
-                $(this).parents(".btn-group").find('.selection').text($(this).text());
-                $(this).parents(".btn-group").find('.selection').val($(this).text());
-
-            });
-        </script>
         <div class=" margin-top: 10%  flex my-3 gap-5">
             <form enctype="multipart/form-data" action="/uploadfiles/local" method="post">
                 <div class="input-group">
