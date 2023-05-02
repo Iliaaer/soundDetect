@@ -5,7 +5,13 @@
 <script>
     const getAllNames = () => {
        // window.location.href = `/allaudio/local`;
-        console.log(((".dropdown-menu li a.selected").val()));
+    //    $(this).parents(".btn-group").find('.selection').text($(this).text());
+    //             $(this).parents(".btn-group").find('.selection').val($(this).text());
+    // let a = document.getElementsByClassName("selection");
+        var e = document.getElementById("ddlViewBy");
+        var strUser = e.options[e.selectedIndex].value;
+        console.log(strUser);
+        // console.log(((".dropdown-menu li a.selected").val()));
     }
 </script>
 <script>
@@ -39,12 +45,18 @@
 
         <div class="btn-group">
             <button onclick="getAllNames()" type="button" class="btn btn-info active">Показать аудиодорожки</button>
-            <button type="button" class="btn btn-info dropdown-toggle active" data-bs-toggle="dropdown"><span class="selection">с устройства</span><span class="caret"></span>
-              </button>
-            <ul class="dropdown-menu" role="menu">
+            <!-- <button type="button" class="btn btn-info dropdown-toggle active" data-bs-toggle="dropdown"><span class="selection">с устройства</span><span class="caret"></span>
+              </button> -->
+
+              <select id="ddlViewBy">
+                <option value="device" class="dropdown-item" href="#">с устройства</option>
+                <option value="computer" class="dropdown-item" href="#">с компьютера</option>
+            </select>
+
+            <!-- <ul class="dropdown-menu" role="menu">
                 <li><a class="dropdown-item" value="device" href="#">с устройства</a></li>
                 <li><a class="dropdown-item" value="computer" href="#">с компьютера</a></li>
-            </ul>
+            </ul> -->
         </div>
 
         <script>

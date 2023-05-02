@@ -21,7 +21,7 @@ def post_upload_file(request: Request, file=Depends(post_audio_file)):
 def get_base_page(request: Request):
     return templates.TemplateResponse("base.html", {"request": request})
 
-@router.get("/home")
+@router.get("/")
 def get_home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
