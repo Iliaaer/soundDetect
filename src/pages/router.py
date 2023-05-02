@@ -2,6 +2,8 @@ from fastapi import APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
+
+
 from src.audiofiles.router import get_all_name_audio_file, post_audio_file
 
 router = APIRouter(
@@ -10,7 +12,6 @@ router = APIRouter(
 )
 
 templates = Jinja2Templates(directory="src/templates")
-
 
 @router.post("/uploadfiles/{device_type}")
 def post_upload_file(request: Request, file=Depends(post_audio_file)):

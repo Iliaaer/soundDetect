@@ -1,28 +1,92 @@
 {% extends "base.html" %}
 
-{% block head %}
 
+{% block head %}
 <script>
     const getAllNames = () => {
-        window.location.href = `/allaudio/local`;
+       // window.location.href = `/allaudio/local`;
+        console.log(((".dropdown-menu li a.selected").val()));
     }
 </script>
+<script>
+    // Helper function
+    const addFileNameToLabel = file => {
+        const fileName = file.target.files[0].name
+        const customLabel = file.target.nextElementSibling
+        customLabel.textContent = fileName
+    }
+
+    // Aply to each `.custom-file-label`
+    document.querySelectorAll('.custom-file-input')
+        .forEach(file => file.addEventListener('change', addFileNameToLabel))
+</script>
+
+<style type="text/css">
+    /* Fix for overflowing file name in label */
+    .custom-file-label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 80px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="flex justify-center flex-col items-center">
-    <div class="flex my-3 gap-5">
-        <button onclick="getAllNames()" class="border-2 rounded-3xl bg-gray-300 p-3">Показать аудиодорожки</button>
-    </div>
-    
-    <p><a>Загрузить аудио</a></p>
+<div style="vertical-align: middle;  height: 100%; margin-top: 15%;">
+    <h1 style="text-align: center; font-size: 30px; margin-bottom: 20px;">Система распознавания голоса</h1>
+    <div class="margin-top: 5%; flex justify-center flex-col items-center">
 
-    <div class="flex my-3 gap-5">
+        <div class="btn-group">
+            <button onclick="getAllNames()" type="button" class="btn btn-info active">Показать аудиодорожки</button>
+            <button type="button" class="btn btn-info dropdown-toggle active" data-bs-toggle="dropdown"><span class="selection">с устройства</span><span class="caret"></span>
+              </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a class="dropdown-item" value="device" href="#">с устройства</a></li>
+                <li><a class="dropdown-item" value="computer" href="#">с компьютера</a></li>
+            </ul>
+        </div>
 
-        <form enctype="multipart/form-data" action="/uploadfiles/local" method="post">
-            <input type="file" name="in_file">
-            <input type="submit" value="Отправить">
-        </form> 
+        <script>
+            $(".dropdown-menu li a").click(function () {
+
+                $(this).parents(".btn-group").find('.selection').text($(this).text());
+                $(this).parents(".btn-group").find('.selection').val($(this).text());
+
+            });
+        </script>
+        <div class=" margin-top: 10%  flex my-3 gap-5">
+            <form enctype="multipart/form-data" action="/uploadfiles/local" method="post">
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile04" name='in_file' required>
+                        <label class="custom-file-label" for="inputGroupFile04">Загрузить аудио</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-info active" type="submit">Отправить</button>
+                    </div>
+                </div>
+            </form>
+            <script type="application/javascript">
+                $('input[type="file"]').change(function (e) {
+                    var fileName = e.target.files[0].name;
+                    $('.custom-file-label').html(fileName);
+                });
+            </script>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+
+{% block footer %}
+<section class="">
+    <footer class="text-center text-white"
+        style="background-color: #868686; position: absolute; bottom: 0; left: 0; right: 0;">
+        <div class="text-center p-3" style="background-color: rgba(100, 100, 100, 0.2);">
+            © 2023 Copyright:
+            <a class="text-white" href="https://mdbootstrap.com/">сюда писать</a>
+        </div>
+    </footer>
+</section>
 {% endblock %}
