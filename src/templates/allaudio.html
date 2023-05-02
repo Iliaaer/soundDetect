@@ -20,7 +20,13 @@ const gotohome = () => {
         <div class="card-body">
           <h5 class="card-title; font-bold " style="margin-bottom: 10px">{{ allname.name }}</h5>
           <p class="card-text " style="margin-bottom: 10px">{{ allname.time }}</p>
-          <a href="#" class="btn btn-primary {% if allname.already == 1 %} active {% else %} disabled {% endif %}" id="button-check">{% if allname.already == 1 %} Загружен {% else %} Загружается {% endif %}</a>
+          <a href="#" class="btn btn-primary {% if allname.already == 1 %} active {% else %} disabled {% endif %}" id="button-check">
+            {% if allname.already == 1 %} 
+                Показать распознаный текст 
+            {% else %} 
+                Подождите, аудио запись распознается 
+            {% endif %}
+          </a>
         </div>
     </div>
 
