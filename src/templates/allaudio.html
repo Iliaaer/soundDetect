@@ -2,24 +2,43 @@
 
 {% block head %}
 <script>
-
+const gotohome = () => {
+        window.location.href = `/`;
+    }
 </script>
 {% endblock %}
 
 {% block content %}
 <div class="flex justify-center flex-col items-center">
-    <div id="header" class="text-2xl font-bold">
-        <h3>Система распознавания голоса</h3>
-    </div>
+
+    <h1 style="text-align: center; font-size: 30px; margin-bottom: 20px; margin-top: 20px;">Система распознавания голоса</h1>
+
+    <button type="button" onclick=gotohome() class="btn btn-info active" style="width: 40%">Вернуться на домашнюю страницу</button>
+
     {% for allname in allnames %}
-    <div class="flex rounded-3 border-2 p-3 mt-5">
-        <div class="flex flex-col">
-            <span class="text-2xl font-bold">{{ allname.name }}</span>
-            <span class="text-lg">{{ allname.time }}</span>
-            <span class="text-lg">{{ allname.already }}</span>
+    <div class="card" style="width: 40%; margin-top: 1%; text-align: center;">
+        <div class="card-body">
+          <h5 class="card-title; font-bold " style="margin-bottom: 10px">{{ allname.name }}</h5>
+          <p class="card-text " style="margin-bottom: 10px">{{ allname.time }}</p>
+          <a href="#" class="btn btn-primary {% if allname.already == 1 %} active {% else %} disabled {% endif %}" id="button-check">{% if allname.already == 1 %} Загружен {% else %} Загружается {% endif %}</a>
         </div>
     </div>
+
 {% endfor %}
 
 </div>
+
+{% endblock %}
+
+
+{% block footer %}
+<section class="">
+    <footer class="text-center text-white"
+        style="background-color: #868686; position: absolute; bottom: 0; left: 0; right: 0;">
+        <div class="text-center p-3" style="background-color: rgba(100, 100, 100, 0.2);">
+            © 2023 Copyright:
+            <a class="text-white" href="https://mdbootstrap.com/">сюда писать</a>
+        </div>
+    </footer>
+</section>
 {% endblock %}
