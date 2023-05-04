@@ -63,7 +63,7 @@ async def update_res_db_text(out_file_path: str, result: dict):
 
 
 @celery.task
-def recognition_audio_files(out_file_path: str, LANGUAGE='ru', MIN_SPEAKERS: int = 1, MAX_SPEAKERS: int = 2,):
+def recognition_audio_files(out_file_path: str, LANGUAGE: str = 'ru', MIN_SPEAKERS: int = 1, MAX_SPEAKERS: int = 2):
     # print('OKEY1')
     # diarization_result = pipeline(f'wav/{out_file_path}', min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
     # asr_result = model.transcribe(f'wav/{out_file_path}', language=LANGUAGE, fp16=False)

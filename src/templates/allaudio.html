@@ -45,13 +45,13 @@ const hidetext = (filename) => {
 {% endblock %}
 
 {% block content %}
-<div class="flex justify-center flex-col items-center">
+<div class="flex justify-center flex-col items-center" >
 
     <h1 style="text-align: center; font-size: 30px; margin-bottom: 20px; margin-top: 20px;">Система распознавания голоса</h1>
 
-    <button type="button" onclick=gotohome() class="btn btn-info active" style="width: 40%">Вернуться на домашнюю страницу</button>
+    <button type="button" onclick=gotohome() class="btn btn-info active" style="width: 50%">Вернуться на домашнюю страницу</button>
     {% for allname in allnames %}
-    <div class="card" style="width: 40%; margin-top: 1%; text-align: center;">
+    <div class="card" style="width: 50%; margin-top: 1%; text-align: center;">
         <div class="card-body">
           <h5 class="card-title; font-bold " style="margin-bottom: 10px">{{ allname.name }}</h5>
           <p class="card-text " style="margin-bottom: 10px">{{ allname.time }}</p>
