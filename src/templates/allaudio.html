@@ -3,8 +3,44 @@
 {% block head %}
 <script>
 const gotohome = () => {
-        window.location.href = `/`;
+    window.location.href = `/`;
+}
+const showtext = (filename, obj) => {
+    obj = obj.replace(/'/g, '"');
+
+    let json = JSON.parse(obj);
+
+    console.log(json);
+    var s = "<pre>";
+    for (let key in json){
+        console.log(json[key]);
+        for (let speack in json[key]){
+            s += speack + ": " + json[key][speack] + "\n"
+        }
     }
+    s  += "<\/pre>"
+
+    var elem = document.getElementById('showtext_'+filename);
+    elem.innerHTML = s;
+
+    var buttonshow = document.getElementById('button-check_'+filename);
+    buttonshow.style.display = "none";
+    
+    var buttonhide = document.getElementById('button-hide_'+filename);
+    buttonhide.style.display = "inline-block";
+
+}
+
+const hidetext = (filename) => {
+    var elem = document.getElementById('showtext_'+filename);
+    elem.innerHTML = "";
+
+    var buttonshow = document.getElementById('button-check_'+filename);
+    buttonshow.style.display = "inline-block";
+
+    var buttonhide = document.getElementById('button-hide_'+filename);
+    buttonhide.style.display = "none";
+}
 </script>
 {% endblock %}
 
@@ -14,19 +50,30 @@ const gotohome = () => {
     <h1 style="text-align: center; font-size: 30px; margin-bottom: 20px; margin-top: 20px;">Система распознавания голоса</h1>
 
     <button type="button" onclick=gotohome() class="btn btn-info active" style="width: 40%">Вернуться на домашнюю страницу</button>
-
     {% for allname in allnames %}
     <div class="card" style="width: 40%; margin-top: 1%; text-align: center;">
         <div class="card-body">
           <h5 class="card-title; font-bold " style="margin-bottom: 10px">{{ allname.name }}</h5>
           <p class="card-text " style="margin-bottom: 10px">{{ allname.time }}</p>
-          <a href="#" class="btn btn-primary {% if allname.already == 1 %} active {% else %} disabled {% endif %}" id="button-check">
+
+          <audio style="margin: auto; margin-bottom: 10px;" controls>
+            <source src="/audiofiles/download?filename={{ allname.name }}" type="audio/wav">
+          </audio>
+
+          <a href="#" onclick="showtext(`{{ allname.name }}`, `{{ allname.data }}`)" style="margin-bottom: 10px" class="btn btn-primary {% if allname.already == 1 %} active {% else %} disabled {% endif %}" id="button-check_{{ allname.name }}">
             {% if allname.already == 1 %} 
                 Показать распознаный текст 
             {% else %} 
                 Подождите, аудио запись распознается 
             {% endif %}
           </a>
+
+          <a href="#" onclick="hidetext('{{ allname.name }}')" style="margin-bottom: 10px; display: none;" class="btn btn-primary" id="button-hide_{{ allname.name }}">Скрыть текст</a>
+          
+          <div style="margin-bottom: 10px" id="divshow_{{ allname.name }}">
+            <p class="card-text" id="showtext_{{ allname.name }}"> </p>
+          </div>
+
         </div>
     </div>
 
@@ -36,15 +83,3 @@ const gotohome = () => {
 
 {% endblock %}
 
-
-<!-- {% block footer %}
-<section class="">
-    <footer class="text-center text-white"
-        style="background-color: #868686; position: absolute; bottom: 0; left: 0; right: 0;">
-        <div class="text-center p-3" style="background-color: rgba(100, 100, 100, 0.2);">
-            © 2023 Copyright:
-            <a class="text-white" href="https://mdbootstrap.com/">сюда писать</a>
-        </div>
-    </footer>
-</section>
-{% endblock %} -->

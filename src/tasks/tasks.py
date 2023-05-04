@@ -19,12 +19,12 @@ from src.config import PIPELINE_TOKEN
 # from pyannote.audio import Pipeline
 
 
-DEVICE_WHISPER = "cpu"
-MODEL_WHISPER  = "large"
+DEVICE_WHISPER = 'cpu'
+MODEL_WHISPER  = 'large'
 
 celery = Celery('tasks', broker='redis://localhost:6379')
 
-DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 Base = declarative_base()
 engine = create_async_engine(DATABASE_URL)
 session: async_sessionmaker[AsyncSession] = async_sessionmaker(engine, expire_on_commit=False)
@@ -32,7 +32,7 @@ session: async_sessionmaker[AsyncSession] = async_sessionmaker(engine, expire_on
 loop = asyncio.get_event_loop()
 
 # pipeline = Pipeline.from_pretrained(
-#     "pyannote/speaker-diarization@2.1", 
+#     'pyannote/speaker-diarization@2.1', 
 #     use_auth_token=PIPELINE_TOKEN
 # )
 
@@ -41,7 +41,7 @@ loop = asyncio.get_event_loop()
 #     device=DEVICE_WHISPER
 # )
 
-print("ALL READY")
+print('ALL READY')
 
 @asynccontextmanager
 async def scoped_session():
@@ -56,24 +56,25 @@ async def scoped_session():
         await scoped_factory.remove()
 
 async def update_res_db_text(out_file_path: str, result: dict):
-    stmt = update(audiofile).where(audiofile.c.name == out_file_path.split("/")[-1]).values(result=result)
+    stmt = update(audiofile).where(audiofile.c.name == out_file_path).values(result=result)
     async with scoped_session() as s:
         await s.execute(stmt)
         await s.commit()
 
 
 @celery.task
-def recognition_audio_files(out_file_path: str, LANGUAGE="ru", MIN_SPEAKERS: int = 1, MAX_SPEAKERS: int = 2,):
-    # print("OKEY1")
-    # diarization_result = pipeline(out_file_path, min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
-    # asr_result = model.transcribe(out_file_path, language=LANGUAGE, fp16=False)
+def recognition_audio_files(out_file_path: str, LANGUAGE='ru', MIN_SPEAKERS: int = 1, MAX_SPEAKERS: int = 2,):
+    # print('OKEY1')
+    # diarization_result = pipeline(f'wav/{out_file_path}', min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
+    # asr_result = model.transcribe(f'wav/{out_file_path}', language=LANGUAGE, fp16=False)
     # final_result = diarize_text(asr_result, diarization_result)
 
-    result = {"data": {
-        # f"{seg.start:.2f}:{seg.end:.2f}": {spk: sent}
+    result = {'data': {
+        # f'{seg.start:.2f}:{seg.end:.2f}': {spk: sent}
         # for seg, spk, sent in final_result
     }}
-    # print("OKEY3")
+    result = {'data': 'Загружается'}
+    # print('OKEY3')
     loop.run_until_complete(update_res_db_text(out_file_path, result))
-    # print("OKEY4")
+    # print('OKEY4')
 
