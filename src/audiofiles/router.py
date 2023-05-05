@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 import aiofiles
 import soundfile as sf
 
@@ -13,17 +12,7 @@ from src.database import get_async_session
 from src.audiofiles.models import audiofile
 from src.audiofiles.schemas import AudioFileCreate
 
-# from src.tasks.tasks import recognition_audio_files
-
-
-# import whisper
-# from pyannote.audio import Pipeline
-# from src.pyannote_whisper.utils import diarize_text
-# from src.config import PIPELINE_TOKEN
-
-# pipeline = Pipeline.from_pretrained('pyannote/speaker-diarization@2.1',
-#                                     use_auth_token=PIPELINE_TOKEN)
-# model = whisper.load_model(name='large', device='cpu')
+from src.tasks.tasks import recognition_audio_files
 
 router = APIRouter(
     prefix='/audiofiles',
@@ -32,19 +21,31 @@ router = APIRouter(
 
 @router.get('/allname')
 async def get_all_name_audio_file(device_type: str, session: AsyncSession = Depends(get_async_session)):
+    """
+    Функция get_all_name_audio_file возвращает список всех аудиофайлов в базе данных.
+        Функция принимает один параметр, device_type, который используется для фильтрации результатов по типу устройства.
+        Функция возвращает объект JSON, содержащий массив объектов с полями name и time.
+    
+    :параметр device_type: str: Выберите аудиофайлы определенного устройства
+    ::param session: AsyncSession: Создайте сеанс с базой данных
+    :return: Список всех аудиофайлов в базе данных
+    """
     query = select(audiofile.c.name, audiofile.c.time, audiofile.c.result).where(audiofile.c.device == device_type)
     result = [dict(r._mapping) for r in await session.execute(query)]
-
-    # print(result)
-    # for r in result:
-    #     print(dict({'name': r['name'], 'time': r['time'], 'already': 0 if r['result']['data'] == 'Загружается' else 1, 'data': r['result']['data']}))
-    #     print()
-
-    return {'result': 
-[dict({'name': r['name'], 'time': r['time'], 'data': r['result']['data'],  'already': 0 if r['result']['data'] == 'Загружается' else 1}) for r in result]}
+    return {'result': [dict({'name': r['name'], 'time': r['time'], 'data': r['result']['data'],  'already': 0 if r['result']['data'] == 'Загружается' else 1}) for r in result]}
 
 @router.post('/upload')
 async def post_audio_file(device_type: str, in_file: UploadFile = File(...), session: AsyncSession = Depends(get_async_session)):
+    """
+    Функция post_audio_file используется для загрузки аудиофайлов.
+        Функция принимает следующие параметры:
+            device_type (str): тип устройства, на которое был записан аудиофайл.
+            in_file (Загрузить файл): Загруженный файл .wav.
+    
+    :параметр device_type: str: Определяет тип устройства, с которого был загружен аудиофайл
+    :параметр in_file: uploadFile: Получить файл от пользователя
+    :param session: AsyncSession: Создайте подключение к базе данных
+    """
     if in_file.filename:
         format_file = in_file.filename.split('.')[-1]
         try:
@@ -64,36 +65,41 @@ async def post_audio_file(device_type: str, in_file: UploadFile = File(...), ses
             await out_file.write(content)
     f = sf.SoundFile(out_file_path)
     result_all = {'data': 'Загружается'}
-    # asr_result = model.transcribe(out_file_path, language='ru', fp16=False)
-    # diarization_result = pipeline(out_file_path, min_speakers=MIN_SPEAKERS, max_speakers=MAX_SPEAKERS)
-    # final_result = diarize_text(asr_result, diarization_result)
-    # result_all = {}
-    # for seg, spk, sent in final_result:
-    #     line = f'{seg.start:.2f} {seg.end:.2f} {spk} {sent}'
-    #     result_all[f'{seg.start:.2f}:{seg.end:.2f}'] = {spk: sent}
-    #     print(line)
+    new_audio_file = AudioFileCreate(name=new_file_name, 
+                                     duration=f'{f.frames/f.samplerate}', 
+                                     time=time_now, 
+                                     device=device_type, 
+                                     result=result_all) 
 
-    # new_audio_file = AudioFileCreate(name=new_file_name, 
-    #                                  duration=f'{f.frames/f.samplerate}', 
-    #                                  time=time_now, 
-    #                                  device=device_type, 
-    #                                  result=result_all) 
-
-    # stmt = insert(audiofile).values(**new_audio_file.dict())
-    # await session.execute(stmt)
-    # await session.commit()
-    # recognition_audio_files.delay(out_file_path=new_file_name)
+    stmt = insert(audiofile).values(**new_audio_file.dict())
+    await session.execute(stmt)
+    await session.commit()
+    recognition_audio_files.delay(out_file_path=new_file_name)
     return {'status': 'success', 'filename': new_file_name, 'result': result_all}
 
 @router.get('/resultfile')
 async def get_result_recognition(filename: str, session: AsyncSession = Depends(get_async_session)):
+    """
+    Функция get_result_recognition возвращает результат распознавания для данного аудиофайла.
+        Функция принимает имя файла аудио и возвращает результат распознавания в виде объекта JSON.
+    
+    :param filename: str: Укажите имя файла, который будет удален
+    ::param session: AsyncSession: Передать сеанс функции
+    :return: объект json, содержащий результат распознавания
+    """
     query = select(audiofile.c.result).where(audiofile.c.name == filename)
     result = await session.execute(query)
     a = [r._mapping for r in result][0]
     return {'result': a['result']}
-    # print(result, type(result))
 
 @router.get('/download')
 def get_audio_file(filename: str):
+    """
+    Функция get_audio_file возвращает объект ответа File, содержащий аудиофайл.
+        Функция принимает имя файла в качестве аргумента и возвращает соответствующий аудиофайл.
+    
+    :param filename: str: Укажите имя файла, который будет воспроизводиться
+    :return: Объект fileresponse
+    """
     return FileResponse(f'wav/{filename}')
 

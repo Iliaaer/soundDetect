@@ -22,11 +22,6 @@ pip install pytorch_lightning==1.6 torch-audiomentations==0.11.0 asteroid-filter
 pip install pyannote.audio --no-deps
 ```
 
-Фротенд: ??? Нужен ли?
-
-Беэкнд:
-
-API: Fast API или Flask
 
 Fast API
 
@@ -49,35 +44,21 @@ uvicorn src.main:app --reload
 ```bash
 alembic revision --autogenerate -m "Database creation"
 alembic upgrade head
-
 ```
 
-База данных: mysql или PostgeSQL
-
-postgeSQL
+База данных:  PostgeSQL
 
 ```bash
 pip install sqlalchemy alembic psycopg2
 alembic init migrations
 ```
 
-Текстовый поиск: elasticsearch
 
-Хранение файлов: ???
+Кэш: redis 
 
-Кэш: redis или memcached  -  Нужен ли?
-
-Очередь задачь: Celery или RabbitMQ - Нужен ли?
-
-Celery
+Очередь задачь: Celery
 
 ```bash
 celery -A src.tasks.tasks:celery worker --loglevel=INFO --pool=solo
 celery -A src.tasks.tasks:celery flower
 ```
-
-Нейроные сети: самописное на паралельном потоке...
-
-Сбор логов: grayLog, logstash
-
-Визуализация логов: kibana

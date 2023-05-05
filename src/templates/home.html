@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block head %}
 <script>
     const getAllNames = () => {
@@ -11,20 +10,17 @@
     }
 </script>
 <script>
-    // Helper function
     const addFileNameToLabel = file => {
         const fileName = file.target.files[0].name
         const customLabel = file.target.nextElementSibling
         customLabel.textContent = fileName
     }
 
-    // Aply to each `.custom-file-label`
     document.querySelectorAll('.custom-file-input')
         .forEach(file => file.addEventListener('change', addFileNameToLabel))
 </script>
 
 <style type="text/css">
-    /* Fix for overflowing file name in label */
     .custom-file-label {
         white-space: nowrap;
         overflow: hidden;

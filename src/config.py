@@ -11,4 +11,4 @@ DB_PASS = os.environ.get('DB_PASS')
 
 SECRET_AUTH = os.environ.get('SECRET_AUTH')
 
-PIPELINE_TOKEN        = os.environ.get('PIPELINE_TOKEN')
+PIPELINE_TOKEN = os.environ.get('PIPELINE_TOKEN')

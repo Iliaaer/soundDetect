@@ -1,14 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-
 from src.audiofiles.router import router as router_audiofile
 from src.pages.router import router as router_pages
 
 app = FastAPI(
     title='Sound Detect'
 )
-
 
 app.add_middleware(
     CORSMiddleware,
