@@ -15,14 +15,6 @@ pip install -qq https://github.com/pyannote/pyannote-audio/archive/develop.zip
 pip install git+https://github.com/openai/whisper.git 
 ```
 
-tets.py
-
-```bash
-pip install pytorch_lightning==1.6 torch-audiomentations==0.11.0 asteroid-filterbanks==0.4 pyannote.metrics==3.2 pyannote.pipeline==2.3 speechbrain torchaudio==2.0.0 torch==2.0.0 hmmlearn==0.2.6
-pip install pyannote.audio --no-deps
-```
-
-
 Fast API
 
 ```bash
@@ -30,16 +22,9 @@ pip install fastapi[all]
 pip install fastapi-users[sqlalchemy]
 pip install asyncpg
 pip install python-multipart
-
 ```
 
-run:
-
-```bash
-uvicorn src.main:app --reload
-```
-
-создание базы данных:
+Создание базы данных:
 
 ```bash
 alembic revision --autogenerate -m "Database creation"
@@ -53,12 +38,14 @@ pip install sqlalchemy alembic psycopg2
 alembic init migrations
 ```
 
-
-Кэш: redis 
+Кэш: redis
 
 Очередь задачь: Celery
+
+Запуск всего:
 
 ```bash
 celery -A src.tasks.tasks:celery worker --loglevel=INFO --pool=solo
 celery -A src.tasks.tasks:celery flower
+uvicorn src.main:app --reload
 ```

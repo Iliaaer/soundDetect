@@ -27,7 +27,7 @@ async def get_all_name_audio_file(device_type: str, session: AsyncSession = Depe
         Функция возвращает объект JSON, содержащий массив объектов с полями name и time.
     
     :параметр device_type: str: Выберите аудиофайлы определенного устройства
-    ::param session: AsyncSession: Создайте сеанс с базой данных
+    :param session: AsyncSession: Создайте сеанс с базой данных
     :return: Список всех аудиофайлов в базе данных
     """
     query = select(audiofile.c.name, audiofile.c.time, audiofile.c.result).where(audiofile.c.device == device_type)
@@ -84,7 +84,7 @@ async def get_result_recognition(filename: str, session: AsyncSession = Depends(
         Функция принимает имя файла аудио и возвращает результат распознавания в виде объекта JSON.
     
     :param filename: str: Укажите имя файла, который будет удален
-    ::param session: AsyncSession: Передать сеанс функции
+    :param session: AsyncSession: Передать сеанс функции
     :return: объект json, содержащий результат распознавания
     """
     query = select(audiofile.c.result).where(audiofile.c.name == filename)

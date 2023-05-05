@@ -107,22 +107,22 @@ def cli():
 
         if output_format == "TXT":
             # save TXT
-            with open(os.path.join(output_dir, audio_basename + ".txt"), "w", encoding="utf-8") as file:
+            with open(os.path.join(output_dir, f"{audio_basename}.txt"), "w", encoding="utf-8") as file:
                 WriteTXT(output_dir).write_result(result, file=file)
 
         elif output_format == "VTT":
             # save VTT
-            with open(os.path.join(output_dir, audio_basename + ".vtt"), "w", encoding="utf-8") as file:
+            with open(os.path.join(output_dir, f"{audio_basename}.vtt"), "w", encoding="utf-8") as file:
                 WriteVTT(output_dir).write_result(result, file=file)
 
         elif output_format == "SRT":
             # save SRT
-           with open(os.path.join(output_dir, audio_basename + ".srt"), "w", encoding="utf-8") as file:
+            with open(os.path.join(output_dir, f"{audio_basename}.srt"), "w", encoding="utf-8") as file:
                 WriteSRT(output_dir).write_result(result, file=file)
 
         if diarization:
             diarization_result = pipeline(audio_path)
-            filepath = os.path.join(output_dir, audio_basename + "_spk.txt")
+            filepath = os.path.join(output_dir, f"{audio_basename}_spk.txt")
             res = diarize_text(result, diarization_result)
             write_to_txt(res, filepath)
 
