@@ -12,7 +12,7 @@ pipeline = Pipeline.from_pretrained(
 )
 
 LANGUAGE: str = 'ru'; MIN_SPEAKERS: int = 1; MAX_SPEAKERS: int = 2; NUM_SPEAKERS: int = 2
-out_file_path = "5.wav"
+out_file_path = "example.wav"
 audio_file = f'wav/{out_file_path}'
 
 diarization_result = pipeline(audio_file, num_speakers=NUM_SPEAKERS)

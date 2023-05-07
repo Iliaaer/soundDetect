@@ -1,11 +1,11 @@
 numpy
-torch
-torchvision
-openai-whisper
-pyannote.audio
-
+# torch
+# torchvision
+# openai-whisper
+# pyannote.audio
+numpy
 alembic
-asyncpg
+asyncpg 
 fastapi[all]
 fastapi-users[sqlalchemy]
 python-dotenv
