@@ -12,7 +12,7 @@ from src.database import get_async_session
 from src.audiofiles.models import audiofile
 from src.audiofiles.schemas import AudioFileCreate
 
-from src.tasks.tasks import recognition_audio_files
+# from src.tasks.tasks import recognition_audio_files
 
 router = APIRouter(
     prefix='/audiofiles',
@@ -74,7 +74,7 @@ async def post_audio_file(device_type: str, in_file: UploadFile = File(...), ses
     stmt = insert(audiofile).values(**new_audio_file.dict())
     await session.execute(stmt)
     await session.commit()
-    recognition_audio_files.delay(out_file_path=new_file_name)
+    # recognition_audio_files.delay(out_file_path=new_file_name)
     return {'status': 'success', 'filename': new_file_name, 'result': result_all}
 
 @router.get('/resultfile')

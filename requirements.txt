@@ -4,6 +4,7 @@ numpy
 # openai-whisper
 # pyannote.audio
 numpy
+chardet
 alembic
 asyncpg 
 fastapi[all]

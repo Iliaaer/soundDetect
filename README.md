@@ -16,7 +16,7 @@ pyannote-audio - https://github.com/pyannote/pyannote-audio
 conda create -n rec python=3.9
 conda activate rec
 
-pip install sqlalchemy[asyncio] numpy alembic asyncpg fastapi[all] fastapi-users[sqlalchemy] python-dotenv  aiofiles fastapi-cache2[redis] celery flower python-multipart
+pip install chardet sqlalchemy[asyncio] numpy alembic asyncpg fastapi[all] fastapi-users[sqlalchemy] python-dotenv  aiofiles fastapi-cache2[redis] celery flower python-multipart
 pip install git+https://github.com/openai/whisper.git 
 pip install -qq https://github.com/pyannote/pyannote-audio/archive/refs/tags/2.1.1.zip
 ```

@@ -18,7 +18,7 @@ audio_file = f'wav/{out_file_path}'
 diarization_result = pipeline(audio_file, num_speakers=NUM_SPEAKERS)
 from pyannote.core import notebook
 notebook.reset()
-who_speaks_when = diarization_result.rename_labels({"SPEAKER_00": "Говорящий 1", "SPEAKER_01": "Говорящий 2"})
+who_speaks_when = diarization_result.rename_labels({"SPEAKER_00": "Гоtesворящий 1", "SPEAKER_01": "Говорящий 2"})
 
 model = whisper.load_model(
     name=MODEL_WHISPER, 
