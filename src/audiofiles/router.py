@@ -2,7 +2,7 @@ from datetime import datetime
 import aiofiles
 import soundfile as sf
 
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, Depends
@@ -30,7 +30,7 @@ async def get_all_name_audio_file(device_type: str, session: AsyncSession = Depe
     :param session: AsyncSession: Создайте сеанс с базой данных
     :return: Список всех аудиофайлов в базе данных
     """
-    query = select(audiofile.c.name, audiofile.c.time, audiofile.c.result).where(audiofile.c.device == device_type)
+    query = select(audiofile.c.name, audiofile.c.time, audiofile.c.result).where(audiofile.c.device == device_type).order_by(desc(audiofile.c.id))
     result = [dict(r._mapping) for r in await session.execute(query)]
     return {'result': [dict({'name': r['name'], 'time': r['time'], 'data': r['result']['data'],  'already': 0 if r['result']['data'] == 'Загружается' else 1}) for r in result]}
 
